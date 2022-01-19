@@ -1,0 +1,24 @@
+{
+  "name": "cryptodip",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/K4L231/CryptoDip.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/K4L231/CryptoDip/issues"
+  },
+  "homepage": "https://github.com/K4L231/CryptoDip#readme",
+  "dependencies": {
+    "discord.js": "^13.6.0",
+    "dotenv": "^14.2.0",
+    "node-binance-api": "^0.13.1"
+  }
+}
