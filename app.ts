@@ -25,7 +25,6 @@ async function run() {
         setTimeout(run, 5000) // runs after 1 hour
     }
     
-
     async function howMuch(){
         let howManyTrades = balanceUSDT / minSize;
         if(howManyTrades >= 2){
@@ -34,21 +33,17 @@ async function run() {
             await dc.sendMSG('Bought for 10 usdt');
             newBalance = await binance.balance();
             await dc.sendMSG('Balance left: ' + Number(newBalance.USDT.available).toFixed(1) + " usd");
-            
         }
         if(howManyTrades >= 1 && howManyTrades < 2) {
             await dc.sendMSG('Current balance: ' + balanceUSDT)
             // await buy(balanceUSDT)
             await dc.sendMSG('Bought for ' + balanceUSDT + " usd")
             newBalance = await binance.balance();
-            await dc.sendMSG('Balance is: ' + Number(newBalance.USDT.available).toFixed(1) + " usd");
-            
+            await dc.sendMSG('Balance is: ' + Number(newBalance.USDT.available).toFixed(1) + " usd"); 
         }
         console.log('Gonna run again after 25hours')
         setTimeout(run, 25000) // runs after 25 hours
     }
-
-
 
         async function buy(quantity){
             try {
