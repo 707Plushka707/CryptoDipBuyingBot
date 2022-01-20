@@ -1,4 +1,7 @@
-const schedule = require('node-schedule');
+// npm i discord.js
+// npm i dotenv
+// npm i node-binance-api
+
 const dc = require("./dcBot");
 require ('dotenv').config();
 const Binance = require('node-binance-api');
