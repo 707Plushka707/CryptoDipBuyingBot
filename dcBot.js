@@ -13,8 +13,6 @@ async function sendMSG(content) {
     while (channel === null) {
         channel = await client.channels.fetch("933371340721881168");
     }
-
-    console.log(channel.name)
     await channel.send(content)
 }
 

@@ -48,47 +48,54 @@ function run() {
                     switch (_a.label) {
                         case 0:
                             howManyTrades = balanceUSDT / minSize;
-                            if (!(howManyTrades >= 2)) return [3 /*break*/, 5];
-                            return [4 /*yield*/, dc.sendMSG('Current balance: ' + balanceUSDT + ' usdt')
-                                // await buy(10)
-                            ];
+                            if (!(howManyTrades >= 2)) return [3 /*break*/, 6];
+                            return [4 /*yield*/, dc.sendMSG('Current balance: ' + balanceUSDT + ' usdt')];
                         case 1:
                             _a.sent();
-                            // await buy(10)
-                            return [4 /*yield*/, dc.sendMSG('Bought for 10 usdt')];
+                            return [4 /*yield*/, buy(10)];
                         case 2:
-                            // await buy(10)
+                            _a.sent();
+                            return [4 /*yield*/, dc.sendMSG('Bought for 10 usdt')];
+                        case 3:
                             _a.sent();
                             return [4 /*yield*/, binance.balance()];
-                        case 3:
+                        case 4:
                             newBalance = _a.sent();
                             return [4 /*yield*/, dc.sendMSG('Balance left: ' + Number(newBalance.USDT.available).toFixed(1) + " usd")];
-                        case 4:
-                            _a.sent();
-                            _a.label = 5;
                         case 5:
-                            if (!(howManyTrades >= 1 && howManyTrades < 2)) return [3 /*break*/, 10];
-                            return [4 /*yield*/, dc.sendMSG('Current balance: ' + balanceUSDT)
-                                // await buy(balanceUSDT)
-                            ];
+                            _a.sent();
+                            console.log('Gonna run again after 25hours');
+                            setTimeout(run, 90000000); // runs after 25 hours
+                            _a.label = 6;
                         case 6:
-                            _a.sent();
-                            // await buy(balanceUSDT)
-                            return [4 /*yield*/, dc.sendMSG('Bought for ' + balanceUSDT + " usd")];
+                            if (!(howManyTrades >= 1 && howManyTrades < 2)) return [3 /*break*/, 12];
+                            return [4 /*yield*/, dc.sendMSG('Current balance: ' + balanceUSDT)];
                         case 7:
-                            // await buy(balanceUSDT)
                             _a.sent();
-                            return [4 /*yield*/, binance.balance()];
+                            return [4 /*yield*/, buy(balanceUSDT)];
                         case 8:
-                            newBalance = _a.sent();
-                            return [4 /*yield*/, dc.sendMSG('Balance is: ' + Number(newBalance.USDT.available).toFixed(1) + " usd")];
+                            _a.sent();
+                            return [4 /*yield*/, dc.sendMSG('Bought for ' + balanceUSDT + " usd")];
                         case 9:
                             _a.sent();
-                            _a.label = 10;
+                            return [4 /*yield*/, binance.balance()];
                         case 10:
+                            newBalance = _a.sent();
+                            return [4 /*yield*/, dc.sendMSG('Balance is: ' + Number(newBalance.USDT.available).toFixed(1) + " usd")];
+                        case 11:
+                            _a.sent();
                             console.log('Gonna run again after 25hours');
-                            setTimeout(run, 25000); // runs after 25 hours
-                            return [2 /*return*/];
+                            setTimeout(run, 90000000); // runs after 25 hours
+                            _a.label = 12;
+                        case 12:
+                            if (!(howManyTrades < 1)) return [3 /*break*/, 14];
+                            return [4 /*yield*/, dc.sendMSG('Not enough balance to make a PURCHASE, Current balance: ' + balanceUSDT)];
+                        case 13:
+                            _a.sent();
+                            console.log('NOT ENOUGH BALANCE, Gonna run again after 25hours');
+                            setTimeout(run, 90000000); // runs after 25 hours
+                            _a.label = 14;
+                        case 14: return [2 /*return*/];
                     }
                 });
             });
@@ -106,7 +113,7 @@ function run() {
                 });
             });
         }
-        var binance, minSize, newBalance, balance, balanceUSDT, previousDay;
+        var binance, minSize, newBalance, balance, balanceUSDT, previousDay, today, time;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -123,12 +130,14 @@ function run() {
                     return [4 /*yield*/, binance.prevDay("ADAUSDT")];
                 case 2:
                     previousDay = _a.sent();
+                    today = new Date();
+                    time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                     if (previousDay.priceChangePercent <= -10) {
                         howMuch();
                     }
                     else {
-                        console.log('Gonna run again after 1 hourrrrrrrrrrrr');
-                        setTimeout(run, 5000); // runs after 1 hour
+                        console.log('Gonna run again after 1 hour - Current change: ' + previousDay.priceChangePercent + " - " + time);
+                        setTimeout(run, 3600000); // runs after 1 hour
                     }
                     return [2 /*return*/];
             }
