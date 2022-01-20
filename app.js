@@ -34,20 +34,64 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var schedule = require('node-schedule');
+var dc = require("./dcBot");
+require('dotenv').config();
+var Binance = require('node-binance-api');
 run();
 function run() {
     return __awaiter(this, void 0, void 0, function () {
         function howMuch() {
-            var howManyTrades = balanceUSDT / minSize;
-            if (howManyTrades >= 2) {
-                // buy(10)
-                console.log('Buy for 10');
-                console.log('Balance left: ', balanceUSDT - 10);
-            }
-            if (howManyTrades >= 1 && howManyTrades < 2) {
-                // buy(balanceUSDT)
-                console.log('Buy forr ' + balanceUSDT);
-            }
+            return __awaiter(this, void 0, void 0, function () {
+                var howManyTrades;
+                return __generator(this, function (_a) {
+                    switch (_a.label) {
+                        case 0:
+                            howManyTrades = balanceUSDT / minSize;
+                            if (!(howManyTrades >= 2)) return [3 /*break*/, 5];
+                            return [4 /*yield*/, dc.sendMSG('Current balance: ' + balanceUSDT + ' usdt')
+                                // await buy(10)
+                            ];
+                        case 1:
+                            _a.sent();
+                            // await buy(10)
+                            return [4 /*yield*/, dc.sendMSG('Bought for 10 usdt')];
+                        case 2:
+                            // await buy(10)
+                            _a.sent();
+                            return [4 /*yield*/, binance.balance()];
+                        case 3:
+                            newBalance = _a.sent();
+                            return [4 /*yield*/, dc.sendMSG('Balance left: ' + Number(newBalance.USDT.available).toFixed(1) + " usd")];
+                        case 4:
+                            _a.sent();
+                            _a.label = 5;
+                        case 5:
+                            if (!(howManyTrades >= 1 && howManyTrades < 2)) return [3 /*break*/, 10];
+                            return [4 /*yield*/, dc.sendMSG('Current balance: ' + balanceUSDT)
+                                // await buy(balanceUSDT)
+                            ];
+                        case 6:
+                            _a.sent();
+                            // await buy(balanceUSDT)
+                            return [4 /*yield*/, dc.sendMSG('Bought for ' + balanceUSDT + " usd")];
+                        case 7:
+                            // await buy(balanceUSDT)
+                            _a.sent();
+                            return [4 /*yield*/, binance.balance()];
+                        case 8:
+                            newBalance = _a.sent();
+                            return [4 /*yield*/, dc.sendMSG('Balance is: ' + Number(newBalance.USDT.available).toFixed(1) + " usd")];
+                        case 9:
+                            _a.sent();
+                            _a.label = 10;
+                        case 10:
+                            console.log('Gonna run again after 25hours');
+                            setTimeout(run, 25000); // runs after 25 hours
+                            return [2 /*return*/];
+                    }
+                });
+            });
         }
         function buy(quantity) {
             return __awaiter(this, void 0, void 0, function () {
@@ -62,20 +106,16 @@ function run() {
                 });
             });
         }
-        var Binance, binance, minSize, balance, balanceUSDT, previousDay;
+        var binance, minSize, newBalance, balance, balanceUSDT, previousDay;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    require('dotenv').config();
-                    Binance = require('node-binance-api');
                     binance = new Binance().options({
                         APIKEY: process.env.APIKEY,
-                        APISECRET: process.env.APISECRET,
-                        useServerTime: true,
-                        recvWindow: 60000,
-                        verbose: true,
+                        APISECRET: process.env.APISECRET
                     });
                     minSize = 10;
+                    newBalance = '';
                     return [4 /*yield*/, binance.balance()];
                 case 1:
                     balance = _a.sent();
@@ -85,6 +125,10 @@ function run() {
                     previousDay = _a.sent();
                     if (previousDay.priceChangePercent <= -10) {
                         howMuch();
+                    }
+                    else {
+                        console.log('Gonna run again after 1 hourrrrrrrrrrrr');
+                        setTimeout(run, 5000); // runs after 1 hour
                     }
                     return [2 /*return*/];
             }
