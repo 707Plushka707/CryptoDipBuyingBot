@@ -6,3 +6,13 @@ To run your bot create .env file with such parameters:\
   APISECRET= Your binance API Secret\
   DC_TOKEN= Discord API TOKEN\
   DC_CHANNEL= Your discord server channel ID (place where purchase updates will be sent)\
+  
+NEEDED:\
+npm i discord.js\
+npm i dotenv\
+npm i node-binance-api\
+
+TO RUN:\
+node app.js
+
+
