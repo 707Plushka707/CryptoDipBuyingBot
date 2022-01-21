@@ -49,15 +49,15 @@ function run() {
                 return __generator(this, function (_a) {
                     switch (_a.label) {
                         case 0:
-                            howManyTrades = balanceUSDT / minSize;
-                            if (!(howManyTrades >= 2)) return [3 /*break*/, 6];
+                            howManyTrades = balanceUSDT / (minSize * price);
+                            if (!(howManyTrades >= 2.1)) return [3 /*break*/, 6];
                             return [4 /*yield*/, dc.sendMSG('Current balance: ' + balanceUSDT + ' usdt')];
                         case 1:
                             _a.sent();
-                            return [4 /*yield*/, buy(10)];
+                            return [4 /*yield*/, buy(minSize)];
                         case 2:
                             _a.sent();
-                            return [4 /*yield*/, dc.sendMSG('Bought for 10 usdt')];
+                            return [4 /*yield*/, dc.sendMSG('Bought for ' + minSize * price + " usd" + " At: " + previousDay.priceChangePercent)];
                         case 3:
                             _a.sent();
                             return [4 /*yield*/, binance.balance()];
@@ -70,52 +70,63 @@ function run() {
                             setTimeout(run, 90000000); // runs after 25 hours
                             _a.label = 6;
                         case 6:
-                            if (!(howManyTrades >= 1 && howManyTrades < 2)) return [3 /*break*/, 12];
+                            if (!(howManyTrades >= 1.05 && howManyTrades < 2.1)) return [3 /*break*/, 13];
                             return [4 /*yield*/, dc.sendMSG('Current balance: ' + balanceUSDT)];
                         case 7:
                             _a.sent();
-                            return [4 /*yield*/, buy(balanceUSDT)];
+                            return [4 /*yield*/, buy(minSize)];
                         case 8:
                             _a.sent();
-                            return [4 /*yield*/, dc.sendMSG('Bought for ' + balanceUSDT + " usd")];
+                            return [4 /*yield*/, dc.sendMSG('Bought for ' + 10 * price + " usd" + " At: " + previousDay.priceChangePercent)];
                         case 9:
                             _a.sent();
-                            return [4 /*yield*/, binance.balance()];
+                            return [4 /*yield*/, dc.sendMSG('Deposit more funds')];
                         case 10:
+                            _a.sent();
+                            return [4 /*yield*/, binance.balance()];
+                        case 11:
                             newBalance = _a.sent();
                             return [4 /*yield*/, dc.sendMSG('Balance is: ' + Number(newBalance.USDT.available).toFixed(1) + " usd")];
-                        case 11:
+                        case 12:
                             _a.sent();
                             console.log('Gonna run again after 25hours');
                             setTimeout(run, 90000000); // runs after 25 hours
-                            _a.label = 12;
-                        case 12:
-                            if (!(howManyTrades < 1)) return [3 /*break*/, 14];
-                            return [4 /*yield*/, dc.sendMSG('Not enough balance to make a PURCHASE, Current balance: ' + balanceUSDT)];
+                            _a.label = 13;
                         case 13:
+                            if (!(howManyTrades < 1.05)) return [3 /*break*/, 15];
+                            return [4 /*yield*/, dc.sendMSG('Not enough balance to make a PURCHASE, Current balance: ' + balanceUSDT)];
+                        case 14:
                             _a.sent();
-                            console.log('NOT ENOUGH BALANCE, Gonna run again after 25hours');
-                            setTimeout(run, 90000000); // runs after 25 hours
-                            _a.label = 14;
-                        case 14: return [2 /*return*/];
+                            console.log('NOT ENOUGH BALANCE, Gonna run again after 5 hours');
+                            setTimeout(run, 3600000 * 5); // runs after 5 hours
+                            _a.label = 15;
+                        case 15: return [2 /*return*/];
                     }
                 });
             });
         }
         function buy(quantity) {
             return __awaiter(this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    try {
-                        console.info(binance.marketBuy("ADAUSDT", quantity));
+                var _a, _b, error_1;
+                return __generator(this, function (_c) {
+                    switch (_c.label) {
+                        case 0:
+                            _c.trys.push([0, 2, , 3]);
+                            _b = (_a = console).info;
+                            return [4 /*yield*/, binance.marketBuy("ADAUSDT", quantity)];
+                        case 1:
+                            _b.apply(_a, [_c.sent()]);
+                            return [3 /*break*/, 3];
+                        case 2:
+                            error_1 = _c.sent();
+                            console.error(error_1);
+                            return [3 /*break*/, 3];
+                        case 3: return [2 /*return*/];
                     }
-                    catch (error) {
-                        console.error(error);
-                    }
-                    return [2 /*return*/];
                 });
             });
         }
-        var binance, minSize, newBalance, balance, balanceUSDT, previousDay, today, time;
+        var binance, minSize, newBalance, balance, balanceUSDT, previousDay, today, time, ticker, price;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -134,12 +145,16 @@ function run() {
                     previousDay = _a.sent();
                     today = new Date();
                     time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                    if (previousDay.priceChangePercent <= -10) {
+                    return [4 /*yield*/, binance.prices()];
+                case 3:
+                    ticker = _a.sent();
+                    price = Number(ticker.ADAUSDT).toFixed(1);
+                    if (previousDay.priceChangePercent <= -20) {
                         howMuch();
                     }
                     else {
-                        console.log('Gonna run again after 1 hour - Current change: ' + previousDay.priceChangePercent + " - " + time);
-                        setTimeout(run, 3600000); // runs after 1 hour
+                        console.log('Gonna run again after 30mins - Current change: ' + previousDay.priceChangePercent + " - " + time);
+                        setTimeout(run, 1800000); // runs after 30mins
                     }
                     return [2 /*return*/];
             }

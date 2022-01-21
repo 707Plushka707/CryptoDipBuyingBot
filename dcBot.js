@@ -9,9 +9,9 @@ const client = new Client({
     ]
 });
 async function sendMSG(content) {
-    let channel = await client.channels.fetch("933371340721881168");
+    let channel = await client.channels.fetch("933990420369797140");
     while (channel === null) {
-        channel = await client.channels.fetch("933371340721881168");
+        channel = await client.channels.fetch("933990420369797140");
     }
     await channel.send(content)
 }
