@@ -10,7 +10,7 @@ To run your bot create .env file with such parameters:\
 NEEDED:\
 npm i discord.js\
 npm i dotenv\
-npm i node-binance-api\
+npm i node-binance-api
 
 TO RUN:\
 node app.js
