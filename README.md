@@ -1,5 +1,5 @@
 # CryptoDipBuyingBot
-This Crypto bot powered by Binance-node-js API buys Crypto Dips, and updates you on discord when your new automatic dip purchase is completed.\
+This Crypto bot powered by Binance-node-js API buys Crypto Dips, and updates you on discord when your new automatic dip purchase is completed.
 
 To run your bot create .env file with such parameters:\
   APIKEY=your binance API key\
